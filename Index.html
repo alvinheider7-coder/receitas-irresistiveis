@@ -1,0 +1,298 @@
+```react
+import React, { useState, useEffect } from 'react';
+import { 
+  BookOpen, 
+  Download, 
+  MessageCircle, 
+  Sun, 
+  Moon, 
+  X, 
+  ChefHat, 
+  ArrowRight
+} from 'lucide-react';
+
+// --- DADOS DOS PRODUTOS (COM IMAGENS REAIS E LINKS ATUALIZADOS) ---
+const products = [
+  {
+    id: 1,
+    title: "8 Receitas Irresistíveis para Fazer em Casa",
+    type: "Produto Principal",
+    imageUrl: "https://i.postimg.cc/B6Fr3P1N/Rosa-e-Branco-Brincalhao-Bolo-do-Dia-Post-para-Instagram.png",
+    readLink: "https://gamma.app/docs/Untitled-jeb9u5f0i4bevps",
+    downloadLink: "https://drive.google.com/file/d/1CyK4hBis9iY_23JrEI5lJgivsWFjRBZS/view?usp=drivesdk"
+  },
+  {
+    id: 2,
+    title: "6 Coberturas e Recheios Irresistíveis",
+    type: "Bónus Especial",
+    imageUrl: "https://i.postimg.cc/L5Mr84tF/Instagram-Post-Confeitaria-Delicado-Rosa-e-Marrom.png",
+    readLink: "https://gamma.app/docs/Untitled-r7qck7ikhei8r7g",
+    downloadLink: "https://drive.google.com/file/d/13WH-QHu0u7WQA90zX7pkhZNxQSlrLnkk/view?usp=drivesdk"
+  },
+  {
+    id: 3,
+    title: "Segredos da Confeitaria Caseira",
+    type: "Bónus Exclusivo",
+    imageUrl: "https://i.postimg.cc/cCNVL1Rd/Recadinho-de-Confeitaria-Instagram-Stories.png",
+    readLink: "https://gamma.app/docs/Segredos-da-Confeitaria-Caseira-789to6pi4447kb3",
+    downloadLink: "https://drive.google.com/file/d/1uzcsTScA-5mUYWav4mLBCAu2HbUneYhY/view?usp=drivesdk"
+  }
+];
+
+export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [supportOpen, setSupportOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  // Efeito simples para simular carregamento no login
+  const handleLogin = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setTimeout(() => {
+      setIsAuthenticated(true);
+      setLoading(false);
+    }, 800);
+  };
+
+  // Previne rolagem quando o suporte está aberto no mobile
+  useEffect(() => {
+    if (supportOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [supportOpen]);
+
+  return (
+    // Container principal que injeta a classe dark se darkMode for true
+    <div className={`${darkMode ? 'dark' : ''} min-h-screen w-full font-sans`}>
+      <style>{`
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
+      
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+        
+        {/* TELA DE LOGIN */}
+        {!isAuthenticated ? (
+          <div className="flex flex-col items-center justify-center min-h-screen px-4 bg-gradient-to-br from-orange-50 to-rose-50 dark:from-gray-900 dark:to-gray-800">
+            <div className="w-full max-w-md p-8 bg-white dark:bg-gray-800 rounded-3xl shadow-2xl dark:shadow-none border border-gray-100 dark:border-gray-700">
+              <div className="flex justify-center mb-6">
+                <div className="w-16 h-16 bg-gradient-to-tr from-orange-500 to-rose-500 rounded-2xl flex items-center justify-center shadow-lg shadow-orange-500/30">
+                  <ChefHat className="w-8 h-8 text-white" />
+                </div>
+              </div>
+              
+              <h1 className="text-2xl font-bold text-center mb-2">Bem-vindo(a)</h1>
+              <p className="text-gray-500 dark:text-gray-400 text-center mb-8 text-sm">
+                Aceda aos seus conteúdos exclusivos de confeitaria.
+              </p>
+
+              <form onSubmit={handleLogin} className="space-y-4">
+                <div>
+                  <input 
+                    type="email" 
+                    placeholder="O seu melhor e-mail" 
+                    className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 dark:text-white transition-all"
+                    required
+                    autoComplete="email"
+                  />
+                </div>
+                <button 
+                  type="submit" 
+                  disabled={loading}
+                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white font-semibold py-4 rounded-xl shadow-lg shadow-orange-500/25 transition-all transform hover:-translate-y-0.5 active:translate-y-0"
+                >
+                  {loading ? (
+                    <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      Aceder ao Dashboard <ArrowRight className="w-5 h-5" />
+                    </>
+                  )}
+                </button>
+              </form>
+            </div>
+            
+            {/* Toggle Tema no Login */}
+            <button 
+              onClick={() => setDarkMode(!darkMode)}
+              className="mt-8 flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+            >
+              {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              <span className="text-sm font-medium">{darkMode ? 'Modo Claro' : 'Modo Escuro'}</span>
+            </button>
+          </div>
+        ) : (
+          
+          /* DASHBOARD (ÁREA DE MEMBROS) */
+          <div className="flex flex-col min-h-screen">
+            
+            {/* Header */}
+            <header className="sticky top-0 z-30 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 px-6 py-4">
+              <div className="max-w-6xl mx-auto flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-tr from-orange-500 to-rose-500 rounded-xl flex items-center justify-center shadow-md">
+                    <ChefHat className="w-5 h-5 text-white" />
+                  </div>
+                  <h1 className="font-bold text-lg hidden sm:block">Vórtex Confeitaria</h1>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gray-200 dark:bg-gray-800 rounded-full flex items-center justify-center border-2 border-white dark:border-gray-700 shadow-sm overflow-hidden">
+                    <img src="https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=f97316" alt="Avatar" className="w-full h-full object-cover" />
+                  </div>
+                </div>
+              </div>
+            </header>
+
+            {/* Conteúdo Principal */}
+            <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-8 pb-32">
+              
+              <div className="mb-10">
+                <h2 className="text-3xl font-bold mb-2">Os Meus Ebooks</h2>
+                <p className="text-gray-500 dark:text-gray-400">Pronto para adoçar o seu dia? Escolha por onde começar.</p>
+              </div>
+
+              {/* Slider Horizontal tipo Netflix */}
+              <div className="flex overflow-x-auto gap-6 pb-8 pt-4 -mx-6 px-6 hide-scrollbar snap-x snap-mandatory">
+                {products.map((product) => (
+                  <div 
+                    key={product.id} 
+                    className="flex-none w-[280px] sm:w-[320px] snap-center bg-white dark:bg-gray-800 rounded-3xl shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl group"
+                  >
+                    {/* Capa do Livro (Imagem Real) */}
+                    <div className="h-64 w-full relative overflow-hidden bg-gray-100 dark:bg-gray-800">
+                      <img 
+                        src={product.imageUrl} 
+                        alt={product.title} 
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        loading="lazy"
+                      />
+                      {/* Tag do Tipo de Produto */}
+                      <div className="absolute top-4 left-4">
+                        <span className="inline-flex items-center px-3 py-1.5 bg-black/60 backdrop-blur-md text-white text-xs font-bold rounded-full shadow-lg">
+                          {product.type}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Corpo do Card */}
+                    <div className="p-6 flex flex-col flex-1">
+                      <h3 className="font-bold text-lg mb-6 leading-tight line-clamp-2 min-h-[3rem]">
+                        {product.title}
+                      </h3>
+                      
+                      <div className="mt-auto space-y-3">
+                        {/* Botões restaurados para tags <a> */}
+                        <a 
+                          href={product.readLink} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="w-full flex items-center justify-center gap-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-semibold py-3.5 rounded-xl hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors cursor-pointer"
+                        >
+                          <BookOpen className="w-5 h-5" /> Ler Agora
+                        </a>
+                        
+                        <a 
+                          href={product.downloadLink} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="w-full flex items-center justify-center gap-2 bg-orange-50 dark:bg-gray-700 text-orange-600 dark:text-white font-semibold py-3.5 rounded-xl hover:bg-orange-100 dark:hover:bg-gray-600 transition-colors cursor-pointer"
+                        >
+                          <Download className="w-5 h-5" /> Baixar PDF
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </main>
+
+            {/* AÇÕES FLUTUANTES (Barra Fixa Direita/Fundo) */}
+            <div className="fixed right-4 bottom-4 md:right-8 md:bottom-8 z-40 flex flex-col gap-3">
+              
+              {/* Botão Tema */}
+              <button 
+                onClick={() => setDarkMode(!darkMode)}
+                className="w-14 h-14 bg-white dark:bg-gray-800 rounded-full shadow-xl flex items-center justify-center border border-gray-100 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors focus:outline-none"
+                aria-label="Alternar Tema"
+              >
+                {darkMode ? <Sun className="w-6 h-6" /> : <Moon className="w-6 h-6" />}
+              </button>
+              
+              {/* Botão Suporte */}
+              <button 
+                onClick={() => setSupportOpen(true)}
+                className="w-14 h-14 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-xl shadow-green-500/30 flex items-center justify-center transition-transform hover:scale-105 focus:outline-none"
+                aria-label="Abrir Suporte"
+              >
+                <MessageCircle className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* SIDEBAR DE SUPORTE (Painel Deslizante) */}
+            
+            {/* Overlay Escuro */}
+            {supportOpen && (
+              <div 
+                className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 transition-opacity"
+                onClick={() => setSupportOpen(false)}
+              />
+            )}
+            
+            {/* Painel em si */}
+            <div 
+              className={`fixed top-0 right-0 h-full w-full max-w-sm bg-white dark:bg-gray-900 shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col ${
+                supportOpen ? 'translate-x-0' : 'translate-x-full'
+              }`}
+            >
+              <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between bg-gray-50 dark:bg-gray-800/50">
+                <h3 className="font-bold text-lg flex items-center gap-2">
+                  <MessageCircle className="w-5 h-5 text-green-500" /> Suporte
+                </h3>
+                <button 
+                  onClick={() => setSupportOpen(false)}
+                  className="p-2 text-gray-500 hover:text-gray-900 dark:hover:text-white bg-white dark:bg-gray-800 rounded-full shadow-sm"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <div className="p-8 flex-1 flex flex-col items-center text-center justify-center mb-10">
+                <div className="w-24 h-24 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-6 border-4 border-white dark:border-gray-800 shadow-lg">
+                  <img 
+                    src="https://api.dicebear.com/7.x/bottts/svg?seed=Vortex&backgroundColor=22c55e" 
+                    alt="Vórtex Support" 
+                    className="w-full h-full rounded-full"
+                  />
+                </div>
+                
+                <h4 className="text-2xl font-bold mb-2">Vórtex</h4>
+                <p className="text-gray-500 dark:text-gray-400 mb-8">
+                  Olá! Fale connosco para ajuda ou dúvidas sobre os ebooks. Estamos online para o atender.
+                </p>
+                
+                {/* Botão de WhatsApp restaurado para tag <a> com número novo */}
+                <a 
+                  href="https://wa.me/258867909890" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-6 rounded-xl shadow-lg shadow-green-500/30 flex items-center justify-center gap-3 transition-transform hover:-translate-y-1 cursor-pointer"
+                >
+                  <MessageCircle className="w-6 h-6" />
+                  Abrir no WhatsApp
+                </a>
+              </div>
+            </div>
+
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+
+
+
